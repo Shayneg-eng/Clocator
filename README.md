@@ -2,9 +2,9 @@ Clocator 🗺️
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://github.com/shayn/clocator/workflows/Tests/badge.svg)](https://github.com/shayn/clocator/actions)
+[![Tests](https://github.com/Shayneg-eng/Clocator/workflows/Tests/badge.svg)](https://github.com/Shayneg-eng/Clocator/actions)
 
-Seamlessly sync and resume your local Claude Code sessions across multiple devices.
+Seamlessly sync local Claude Code sessions across devices by anchoring volatile, absolute folder paths to your repository's permanent Git remote URL.
 
 Clocator (Claude Locator) solves a major pain point in the Claude Code developer workflow: hardcoded absolute file paths.
 
@@ -57,33 +57,35 @@ Clocator operates in a simple, two-step lifecycle integrated into your multi-dev
 
 When you've finished coding on your first machine, run:
 
+```bash
 clocator push
+```
 
-
-Under the Hood: Clocator looks up the active workspace path in your native claude.json, reads your local git remote URL (e.g., git@github.com:username/repo.git), and maps that unique repository fingerprint to your current Claude Session ID in a lightweight, synced tracking file (clocator-map.json).
+Under the Hood: Clocator looks up the active workspace path in your native `claude.json`, reads your local git remote URL (e.g., `git@github.com:username/repo.git`), and maps that unique repository fingerprint to your current Claude Session ID in a lightweight, synced tracking file (`clocator-map.json`).
 
 2. On Computer B (When you arrive)
 
 After your cloud syncing service (Dropbox, iCloud, OneDrive, etc.) copies your profile over to your second machine, open your project directory and run:
 
+```bash
 clocator pull
+```
 
-
-Under the Hood: Clocator checks your current directory's git remote, looks it up in the synced clocator-map.json to find the correct Session ID, and dynamically updates the path keys inside Computer B's local claude.json on the fly.
+Under the Hood: Clocator checks your current directory's git remote, looks it up in the synced `clocator-map.json` to find the correct Session ID, and dynamically updates the path keys inside Computer B's local `claude.json` on the fly.
 
 You can now run claude and pick up exactly where you left off, with full history and context intact!
 
 📖 Command Reference
 
-clocator push
+`clocator push`
 
 Saves the mapping of the current directory's Git Remote URL to the active Claude Code session ID. Run this right before your files sync.
 
-clocator pull
+`clocator pull`
 
-Detects the Git Remote URL of the current directory, finds the corresponding Claude session, and patches your local claude.json configuration so Claude instantly recognizes your workspace on this machine.
+Detects the Git Remote URL of the current directory, finds the corresponding Claude session, and patches your local `claude.json` configuration so Claude instantly recognizes your workspace on this machine.
 
-clocator status
+`clocator status`
 
 Shows the current Git Remote, its mapped Claude session ID, and whether your local path is correctly synchronized in the configuration.
 
@@ -113,8 +115,8 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 ## 💡 Questions?
 
-- **Issues**: [GitHub Issues](https://github.com/shayn/clocator/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/shayn/clocator/discussions)
+- **Issues**: [GitHub Issues](https://github.com/Shayneg-eng/Clocator/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Shayneg-eng/Clocator/discussions)
 
 ---
 
