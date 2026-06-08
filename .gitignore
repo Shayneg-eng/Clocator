@@ -36,6 +36,9 @@ venv/
 ENV/
 env/
 
+# Local Claude Code configuration
+.claude/
+
 System-specific files
 
 .DS_Store
