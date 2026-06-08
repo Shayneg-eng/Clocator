@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\Coding\\\\Code\\\\Clocator\\\\Code\")",
+      "Bash(Select-Object Name, PSIsContainer)",
+      "Bash(Format-Table -AutoSize)",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(python clocator.py push)",
+      "PowerShell($env:PYTHONIOENCODING = \"utf-8\"; cd 'C:\\\\Coding\\\\Code\\\\Clocator\\\\Code'; python clocator.py push)",
+      "PowerShell($env:PYTHONIOENCODING = \"utf-8\"; cd 'C:\\\\Coding\\\\Code\\\\Clocator\\\\Code'; python clocator.py status)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'Initial release: Clocator v1.0.0 *)"
+    ]
+  }
+}

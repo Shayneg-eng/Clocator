@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clocator"
+version = "1.0.0"
+authors = [
+{ name = "Shayn", email = "shayn@example.com" }
+]
+description = "Seamlessly sync Claude Code sessions across multiple devices using Git remotes as stable fingerprints."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+keywords = ["claude", "claude-code", "sync", "git", "multi-device", "productivity"]
+classifiers = [
+"Programming Language :: Python :: 3",
+"Programming Language :: Python :: 3.8",
+"Programming Language :: Python :: 3.9",
+"Programming Language :: Python :: 3.10",
+"Programming Language :: Python :: 3.11",
+"Programming Language :: Python :: 3.12",
+"License :: OSI Approved :: MIT License",
+"Operating System :: OS Independent",
+"Environment :: Console",
+"Intended Audience :: Developers",
+"Topic :: Software Development :: Libraries :: Python Modules",
+"Topic :: Utilities",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/shayn/clocator"
+Repository = "https://github.com/shayn/clocator.git"
+Issues = "https://github.com/shayn/clocator/issues"
+Documentation = "https://github.com/shayn/clocator#readme"
+
+[project.scripts]
+clocator = "clocator:main"
+
