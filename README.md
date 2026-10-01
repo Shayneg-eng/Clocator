@@ -1,123 +1,56 @@
-Clocator 🗺️
+# Clocator
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PyPI](https://img.shields.io/pypi/v/clocator.svg)](https://pypi.org/project/clocator/)
 [![Tests](https://github.com/Shayneg-eng/Clocator/workflows/Tests/badge.svg)](https://github.com/Shayneg-eng/Clocator/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Seamlessly sync local Claude Code sessions across devices by anchoring volatile, absolute folder paths to your repository's permanent Git remote URL.
+Pick up your Claude Code conversations on a different computer.
 
-Clocator (Claude Locator) solves a major pain point in the Claude Code developer workflow: hardcoded absolute file paths.
+Claude Code stores each project's conversation history under `~/.claude/projects/`, in a folder named after the project's full path. `/Users/me/code/my-app` becomes `-Users-me-code-my-app`. So even if you sync `~/.claude` between two machines, the history doesn't follow you, because on the other machine the project lives at `/home/me/projects/my-app` and Claude looks for a folder that doesn't exist.
 
-Claude Code indexes your conversational history using rigid, local directories (e.g., /Users/dev/Projects/my-app). When you synchronize your development environment across different machines (like a work iMac and a personal MacBook), this mapping breaks because of differing directory structures.
+Clocator fixes that by keying projects on something that's the same everywhere: the git remote URL.
 
-Clocator acts as an intelligent abstraction layer. It decouples your Claude session history from volatile local folder paths and anchors them to a permanent digital fingerprint: your GitHub/Git Repository URL.
+## How it works
 
-⚡ The Problem vs. The Clocator Solution
+**On the machine you're leaving**, run `clocator push` inside the project. It reads `remote.origin.url` and records which history folder belongs to that remote in `~/.claude/clocator-map.json`.
 
-❌ WITHOUT CLOCATOR:
-Computer A (/Users/dev/project) ──[Syncs claude.json]──> Computer B (/home/ubuntu/code/project)
-                                                                 │
-                                                    ⚠️ Claude fails to find path!
-                                                    ⚠️ Starts blank session.
+**On the machine you're switching to**, once your sync tool has copied `~/.claude` over, run `clocator pull` inside the same project. It looks up the remote in the map, finds the original history folder, and creates a link to it under the name Claude expects for this machine's path. That's a symlink on macOS and Linux, and a directory junction on Windows, so you don't need admin rights.
 
-==========================================================================================
+Start `claude` and your history is there. Nothing in Claude's own files gets edited, so to undo it you just delete the link.
 
-✅ WITH CLOCATOR:
-Computer A (/Users/dev/project) ──> Clocator Map (Git Remote URL) ──┐
-                                                                   │ (Synced via cloud)
-Computer B (/home/ubuntu/code/project) <── Dynamic Path Patching ──┘
+```
+$ cd ~/projects/my-app
+$ clocator pull
+ℹ Local Directory: /home/me/projects/my-app
+ℹ Local Claude Key: -home-me-projects-my-app
+ℹ Synced Claude Key: -Users-me-code-my-app
+✔ Linked: -home-me-projects-my-app ➔ -Users-me-code-my-app
+✔ Pull Successful! Your Claude session history is now linked and synchronized.
+```
 
+If a real folder already exists where the link would go, Clocator leaves it alone and warns you instead of overwriting it.
 
-By reading your local .git/config and translating paths on the fly at the last millisecond, Clocator tricks Claude Code into thinking you never switched devices.
-
-🛠️ Installation & Setup
-
-Clocator is designed to be lightweight, fast, and dependency-free.
-
-### Quick Start
+## Install
 
 ```bash
 pip install clocator
 ```
 
-For detailed installation options and troubleshooting, see the [Installation Guide](INSTALL.md).
+Or `pipx install clocator`, or just download `clocator.py` and run it with Python. It has no dependencies beyond the standard library. You need Python 3.8+, git, and something that syncs `~/.claude` between your machines (Dropbox, iCloud, OneDrive, Syncthing, whatever you already use).
 
-### What's Required
+## Commands
 
-- **Python 3.8 or later**
-- **Git** (already on your machine if you're a developer)
-- A cloud sync service (Dropbox, iCloud, OneDrive, Syncthing, etc.)
+| Command | What it does |
+|---|---|
+| `clocator push` | Record this project's history folder under its git remote |
+| `clocator pull` | Link this machine's path to the synced history folder |
+| `clocator status` | Show the remote, both folder names, and whether they're linked |
 
+You only need to `push` once per project. After that, `pull` on any new machine (or after you move the project folder) is enough.
 
-🚀 How It Works
+## Limitations
 
-Clocator operates in a simple, two-step lifecycle integrated into your multi-device workflow:
+- The project needs a remote named `origin`. Two clones of the same repo share one history.
+- It only links whole history folders. It doesn't merge conversations from two machines that both have their own history for the same project.
 
-1. On Computer A (Before you leave)
-
-When you've finished coding on your first machine, run:
-
-```bash
-clocator push
-```
-
-Under the Hood: Clocator looks up the active workspace path in your native `claude.json`, reads your local git remote URL (e.g., `git@github.com:username/repo.git`), and maps that unique repository fingerprint to your current Claude Session ID in a lightweight, synced tracking file (`clocator-map.json`).
-
-2. On Computer B (When you arrive)
-
-After your cloud syncing service (Dropbox, iCloud, OneDrive, etc.) copies your profile over to your second machine, open your project directory and run:
-
-```bash
-clocator pull
-```
-
-Under the Hood: Clocator checks your current directory's git remote, looks it up in the synced `clocator-map.json` to find the correct Session ID, and dynamically updates the path keys inside Computer B's local `claude.json` on the fly.
-
-You can now run claude and pick up exactly where you left off, with full history and context intact!
-
-📖 Command Reference
-
-`clocator push`
-
-Saves the mapping of the current directory's Git Remote URL to the active Claude Code session ID. Run this right before your files sync.
-
-`clocator pull`
-
-Detects the Git Remote URL of the current directory, finds the corresponding Claude session, and patches your local `claude.json` configuration so Claude instantly recognizes your workspace on this machine.
-
-`clocator status`
-
-Shows the current Git Remote, its mapped Claude session ID, and whether your local path is correctly synchronized in the configuration.
-
-## Documentation
-
-- **[Installation Guide](INSTALL.md)** — Detailed setup instructions for all platforms
-- **[Contributing Guide](CONTRIBUTING.md)** — How to contribute to Clocator
-- **[Changelog](CHANGELOG.md)** — Version history and updates
-- **[Security Policy](SECURITY.md)** — How to report vulnerabilities
-
-## Troubleshooting
-
-Having issues? Check out the [Installation Guide](INSTALL.md#troubleshooting) troubleshooting section.
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome! 
-
-1. Check out the [Contributing Guide](CONTRIBUTING.md)
-2. Fork the repository
-3. Create a feature branch
-4. Submit a pull request
-
-## 📄 License
-
-Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
-
-## 💡 Questions?
-
-- **Issues**: [GitHub Issues](https://github.com/Shayneg-eng/Clocator/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Shayneg-eng/Clocator/discussions)
-
----
-
-Made with ❤️ for developers who code on multiple devices
+More install options and troubleshooting are in [INSTALL.md](INSTALL.md). Bug reports and pull requests are welcome, see [CONTRIBUTING.md](CONTRIBUTING.md). MIT licensed.

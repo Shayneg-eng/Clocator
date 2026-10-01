@@ -6,9 +6,9 @@ build-backend = "setuptools.build_meta"
 name = "clocator"
 version = "1.0.0"
 authors = [
-{ name = "Shayn", email = "shayn@example.com" }
+{ name = "Shayne Goldstein" }
 ]
-description = "Seamlessly sync Claude Code sessions across multiple devices using Git remotes as stable fingerprints."
+description = "Pick up your Claude Code conversation history on another computer, matched by git remote."
 readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "MIT" }
@@ -30,10 +30,10 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/shayn/clocator"
-Repository = "https://github.com/shayn/clocator.git"
-Issues = "https://github.com/shayn/clocator/issues"
-Documentation = "https://github.com/shayn/clocator#readme"
+Homepage = "https://github.com/Shayneg-eng/Clocator"
+Repository = "https://github.com/Shayneg-eng/Clocator.git"
+Issues = "https://github.com/Shayneg-eng/Clocator/issues"
+Documentation = "https://github.com/Shayneg-eng/Clocator#readme"
 
 [project.scripts]
 clocator = "clocator:main"

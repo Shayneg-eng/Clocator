@@ -1,125 +1,58 @@
-# Installation Guide
+# Installing Clocator
 
-Choose the installation method that works best for your workflow.
-
-## Option 1: Install with pip (Recommended)
-
-The easiest way to install Clocator globally:
+## pip
 
 ```bash
 pip install clocator
 ```
 
-Then use the `clocator` command from anywhere in your terminal.
+## pipx
 
-## Option 2: Install from source
-
-If you want the latest development version:
-
-```bash
-# Clone the repository
-git clone https://github.com/shayn/clocator.git
-cd clocator
-
-# Install in development mode
-pip install -e .
-```
-
-## Option 3: Install with pipx (Isolated environment)
-
-For isolated global command-line apps without affecting your Python environment:
+If you'd rather keep command-line tools out of your main Python environment:
 
 ```bash
 pipx install clocator
 ```
 
-This is recommended if you use many CLI tools and want to keep them isolated.
-
-## Option 4: Use as a standalone script
-
-If you prefer not to install anything:
+## From source
 
 ```bash
-# Download clocator.py
-wget https://raw.githubusercontent.com/shayn/clocator/main/clocator.py
+git clone https://github.com/Shayneg-eng/Clocator.git
+cd Clocator
+pip install -e .
+```
 
-# Run it with Python
-python clocator.py push
-python clocator.py pull
+## No install
+
+`clocator.py` is a single file with no dependencies, so you can just download it and run it:
+
+```bash
+curl -O https://raw.githubusercontent.com/Shayneg-eng/Clocator/main/clocator.py
 python clocator.py status
 ```
 
 ## Requirements
 
-- **Python 3.8 or later**
-- **Git** (already installed on most development machines)
-- A cloud sync service (Dropbox, iCloud, OneDrive, Syncthing, Resilio Sync, etc.)
+- Python 3.8 or newer
+- git
+- A sync tool that keeps `~/.claude` the same on every machine (Dropbox, iCloud, OneDrive, Syncthing, and so on)
 
-## Verifying Installation
+Check that it worked with `clocator --help`.
 
-After installing, verify it works:
+## Troubleshooting
 
-```bash
-clocator --help
-```
+**`clocator: command not found`**: pip's scripts folder isn't on your PATH. Run `python -m pip show clocator` to find where it installed, or use pipx, which handles PATH for you.
 
-You should see the help message with available commands.
+**"Not a git repository"**: run Clocator from inside the project folder. The project also needs a remote named `origin` (`git remote -v` shows what's set).
 
-## Uninstallation
+**"No mapped session found"**: you haven't run `clocator push` for this repo on the other machine yet, or `~/.claude/clocator-map.json` hasn't finished syncing.
 
-### If you installed with pip:
+**"A physical directory already exists"**: Claude has already created its own history folder for this path on this machine. Clocator won't overwrite it. If you don't need what's in there, delete or rename that folder in `~/.claude/projects/` and run `clocator pull` again.
+
+## Uninstall
+
 ```bash
 pip uninstall clocator
 ```
 
-### If you installed with pipx:
-```bash
-pipx uninstall clocator
-```
-
-### If you used the standalone script:
-Simply delete the `clocator.py` file.
-
-## Troubleshooting
-
-### "clocator: command not found"
-
-Make sure the installation completed successfully:
-
-```bash
-pip install --force-reinstall clocator
-```
-
-### "Not a git repository" error
-
-Clocator requires your working directory to be inside a Git repository:
-
-```bash
-git init
-git remote add origin https://github.com/your-username/your-repo.git
-```
-
-### Windows permission issues
-
-If you get permission errors on Windows, ensure Python is installed for your user:
-
-```bash
-python --version
-pip --version
-```
-
-Or use `pipx` which handles permissions more gracefully:
-
-```bash
-pipx install clocator
-```
-
-## Getting Started
-
-Once installed, see the [README](README.md) for usage instructions:
-
-```bash
-clocator push   # Before syncing your files
-clocator pull   # After syncing on a new machine
-clocator status # Check synchronization status
-```
+Any links Clocator made in `~/.claude/projects/` stay where they are. Delete them if you don't want them.
